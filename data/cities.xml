@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cities>
+    <city>
+        <cityName lang="en">Cologne</cityName>
+        <cityName land="de">Köln</cityName>
+        <description>
+            <author>Patrick Jominet</author>
+            <body lang="de">Hauptstadt von NRW, berühmt durch den Kölner Dom.</body>
+            <body lang="en">Capital of NRW, famous by the Cologne Cathedral ("Kölner Dom").</body>
+        </description>
+    </city>
+    <city>
+        <cityName lang="en">Luxembourg</cityName>
+        <cityName land="de">Luxemburg</cityName>
+        <description>
+            <author>Patrick Jominet</author>
+            <body lang="de">Hauptstadt von Luxemburg, einem kleinen Land mitten in Europa.</body>
+            <body lang="en">Capital of Luxembourg, a small country in the middle of Europe.</body>
+        </description>
+    </city>
+</cities>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Patrick Jominet">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Browser</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="css/custom.css">
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+
+</head>
+<body>
+<div class="container">
+
+    <header class="header page-header">
+        <div class="row">
+            <div class="col-md-2">
+                <img class="img-responsive center-block" src="img/skyline.png" alt="Page Logo">
+            </div>
+            <div class="col-md-10">
+                <h1>City Browser</h1>
+            </div>
+        </div>
+    </header>
+
+    <main class="container-fluid">
+
+        <div class="well">
+
+            <div class="row">
+
+                <div class="col-md-2 button-wrapper">
+                    <div class="btn-group btn-group-justified">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                                    id="dropdownLabel">
+                                All&nbsp;<span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" id="dropdownLabelList">
+                                <li><a href="#" id="searchGerman">German</a></li>
+                                <li><a href="#" id="searchEnglish">English</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <input type="search" placeholder="search for..." class="form-control" id="searchBar">
+                    <span class="input-group-btn">
+                        <button class="btn btn-info" id="searchButton">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="resultPanel"></div>
+
+    </main>
+
+    <hr>
+
+    <footer class="footer">
+        <p>
+            Created with <span class="glyphicon glyphicon-heart"></span> by Patrick Jominet 2017
+            <br>
+            <a class="btn  btn-link" href="about.html">About this Page</a>|
+            <a class="btn  btn-link" href="contribute.html">Contribute</a>
+        </p>
+    </footer>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" src="js/app.js"></script>
+
+</body>
+</html>
