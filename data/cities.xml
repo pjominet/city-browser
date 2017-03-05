@@ -2,20 +2,20 @@
 <cities>
     <city>
         <cityName lang="en">Cologne</cityName>
-        <cityName land="de">Köln</cityName>
+        <cityName lang="de">Köln</cityName>
         <description>
             <author>Patrick Jominet</author>
-            <body lang="de">Hauptstadt von NRW, berühmt durch den Kölner Dom.</body>
-            <body lang="en">Capital of NRW, famous by the Cologne Cathedral ("Kölner Dom").</body>
+            <abstract lang="de">Hauptstadt von NRW, berühmt durch den Kölner Dom.</abstract>
+            <abstract lang="en">Capital of NRW, famous by the Cologne Cathedral ("Kölner Dom").</abstract>
         </description>
     </city>
     <city>
         <cityName lang="en">Luxembourg</cityName>
-        <cityName land="de">Luxemburg</cityName>
+        <cityName lang="de">Luxemburg</cityName>
         <description>
             <author>Patrick Jominet</author>
-            <body lang="de">Hauptstadt von Luxemburg, einem kleinen Land mitten in Europa.</body>
-            <body lang="en">Capital of Luxembourg, a small country in the middle of Europe.</body>
+            <abstract lang="de">Hauptstadt von Luxemburg, einem kleinen Land mitten in Europa.</abstract>
+            <abstract lang="en">Capital of Luxembourg, a small country in the middle of Europe.</abstract>
         </description>
     </city>
 </cities>
