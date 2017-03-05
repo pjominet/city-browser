@@ -76,11 +76,11 @@ $(document).ready(function () {
 
     $('#dropdownLabelList').on('click', '#searchAll', function (event) {
         event.preventDefault();
-        changeDropdownLabel('All');
+        changeDropdownLabel('International');
         searchByOption = 0;
         if (appendState) {
             $('li.divider').remove();
-            $('li').filter(":contains('All')").remove();
+            $('li').filter(":contains('International')").remove();
             appendState = false;
         }
         var checkInput = searchBar.val();
@@ -101,7 +101,7 @@ $(document).ready(function () {
     function appendDropdownDefault() {
         $('#dropdownLabelList').append(
             '<li class="divider"></li>' +
-            '<li><a href="#" id="searchAll">All</a></li>'
+            '<li><a href="#" id="searchAll">International</a></li>'
         );
     }
 
