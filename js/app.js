@@ -124,50 +124,69 @@ $(document).ready(function () {
         input = input.toLowerCase();
         queryCities();
 
-        var cityName = [];
+        var cityName = {en:"", de:""};
         var descriptionAuthor = "";
-        var descriptionAbstract = [];
+        var descriptionAbstract = {en:"", de:""};
+        var nameWithLangExt;
 
-        // do not search when input is less than 3 characters
-        if (input.length > 2) {
-            if(cities != undefined) {
-                $.each($(cities).find('city'), function () {
-                    descriptionAuthor = $(this).find('description').find('author').text();
-                    cityName.push($(this).find('cityName[lang="en"]').text());
-                    cityName.push($(this).find('cityName[lang="de"]').text());
-                    descriptionAbstract.push($(this).find('description').find('abstract[lang="en"]').text());
-                    descriptionAbstract.push($(this).find('description').find('abstract[lang="de"]').text());
-                });
-                if(searchByOption === 0) {
-                    if(cityName[0].toLowerCase().includes(input) || cityName[1].toLowerCase().includes(input)) {
-                        matchedCities.push({
-                            name: cityName[0],
-                            author: descriptionAuthor,
-                            abstract: descriptionAbstract[0]
-                        });
-                        searchResults++;
+        // do not search when input is less than 3 characters or no data
+        if (input.length > 2 && cities != undefined) {
+            $.each($(cities).find('city'), function (index, city) {
+                descriptionAuthor = $(city).find('description').find('author').text();
+                cityName["en"] = $(city).find('cityName[lang="en"]').text();
+                cityName["de"] = $(city).find('cityName[lang="de"]').text();
+                descriptionAbstract["en"] = $(city).find('description').find('abstract[lang="en"]').text();
+                descriptionAbstract["de"] = $(city).find('description').find('abstract[lang="de"]').text();
+                //console.log(index +'='+ cityName);
+                $.each(cityName, function (key, value) {
+                    //console.log(key +'='+ value);
+                    if(searchByOption === 0) {
+                        if (cityName[key].toLowerCase().includes(input)) {
+                            if (cityName["en"] == cityName["de"])
+                                nameWithLangExt = cityName[key] + " (" + key + ")";
+                            else
+                                nameWithLangExt = cityName[key];
+                            matchedCities.push({
+                                name: nameWithLangExt,
+                                author: descriptionAuthor,
+                                abstract: descriptionAbstract[key]
+                            });
+                            searchResults++;
+                        }
+                    } else if(searchByOption === 1) {
+                        if(cityName["de"].toLowerCase().includes(input)) {
+                            if(findObjectInArray(cityName["de"]) == null) {
+                                matchedCities.push({
+                                    name: cityName["de"],
+                                    author: descriptionAuthor,
+                                    abstract: descriptionAbstract["de"]
+                                });
+                                searchResults++;
+                            }
+                        }
+                    } else if(searchByOption === 2) {
+                        if(cityName["en"].toLowerCase().includes(input)) {
+                            if(findObjectInArray(cityName["en"]) == null) {
+                                matchedCities.push({
+                                    name: cityName["en"],
+                                    author: descriptionAuthor,
+                                    abstract: descriptionAbstract["en"]
+                                });
+                                searchResults++;
+                            }
+                        }
                     }
-                } else if(searchByOption === 1) {
-                    if(cityName[1].toLowerCase().includes(input)) {
-                        matchedCities.push({
-                            name: cityName[1],
-                            author: descriptionAuthor,
-                            abstract: descriptionAbstract[1]
-                        });
-                        searchResults++;
-                    }
-                } else if(searchByOption === 2) {
-                    if(cityName[0].toLowerCase().includes(input)) {
-                        matchedCities.push({
-                            name: cityName[0],
-                            author: descriptionAuthor,
-                            abstract: descriptionAbstract[0]
-                        });
-                        searchResults++;
-                    }
-                }
-            }
+                })
+            });
         }
+    }
+
+    function findObjectInArray (property) {
+        for (var i = 0, len = matchedCities.length; i < len; i++) {
+            if (matchedCities[i].name === property)
+                return matchedCities[i];
+        }
+        return null;
     }
 
     /** Result Panel Handler **/
@@ -229,6 +248,6 @@ $(document).ready(function () {
                 '</div>'
 
         }
-        $('#accordion').append(accordion);
+        $('#accordion').append(accordion).find('.panel-collapse:first').addClass("in");
     }
 });
