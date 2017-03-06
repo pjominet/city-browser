@@ -20,10 +20,11 @@ $(document).ready(function () {
         }, "xml");
     }
 
-    function queryWeather(query, language) {
-        $.get('http://api.openweathermap.org/data/2.5/weather?q=' + query +
+    function queryWeather(cityName, language) {
+        $.get('http://api.openweathermap.org/data/2.5/weather?q=' + cityName +
             '&APPID=' + apiKey +
             '&units=metric' +
+            '&mode=xml' +
             '&lang=' + language, function (data) {
             weather = data;
         }, "xml");
@@ -42,6 +43,7 @@ $(document).ready(function () {
             executeSearch();
         });
 
+    /** Button label Handlers **/
     $('#searchGerman').click(
         function (event) {
             event.preventDefault();
@@ -114,13 +116,13 @@ $(document).ready(function () {
         $('#accordion').empty();
         // start search
         var userInput = searchBar.val();
-        search(userInput);
+        searchCities(userInput);
         resultPanelHandler();
 
     }
 
-    /** Search Algorithm **/
-    function search(input) {
+    /** Search Algorithms **/
+    function searchCities(input) {
         input = input.toLowerCase();
         queryCities();
 
@@ -155,7 +157,7 @@ $(document).ready(function () {
                         }
                     } else if(searchByOption === 1) {
                         if(cityName["de"].toLowerCase().includes(input)) {
-                            if(findObjectInArray(cityName["de"]) == null) {
+                            if(findCityInArray(cityName["de"]) == null) {
                                 matchedCities.push({
                                     name: cityName["de"],
                                     author: descriptionAuthor,
@@ -166,7 +168,7 @@ $(document).ready(function () {
                         }
                     } else if(searchByOption === 2) {
                         if(cityName["en"].toLowerCase().includes(input)) {
-                            if(findObjectInArray(cityName["en"]) == null) {
+                            if(findCityInArray(cityName["en"]) == null) {
                                 matchedCities.push({
                                     name: cityName["en"],
                                     author: descriptionAuthor,
@@ -181,9 +183,9 @@ $(document).ready(function () {
         }
     }
 
-    function findObjectInArray (property) {
+    function findCityInArray (byName) {
         for (var i = 0, len = matchedCities.length; i < len; i++) {
-            if (matchedCities[i].name === property)
+            if (matchedCities[i].name === byName)
                 return matchedCities[i];
         }
         return null;
@@ -220,9 +222,8 @@ $(document).ready(function () {
         }
     }
 
-    /** Accordion **/
+    /** Accordion Constructor **/
     function generateAccordion(numberResults) {
-
         var accordion = '';
 
         for (var i = 0; i < numberResults; i++) {
@@ -237,13 +238,13 @@ $(document).ready(function () {
                 '<div id="collapse_' + i + '" class="panel-collapse collapse">' +
                 '<ul class="list-group">' +
                 '<li class="list-group-item">' +
-                '<p class="list-group-item-text">' + matchedCities[i].abstract + '</p>' +
-                '</li>' +
-                '<li class="list-group-item">' +
                 '<p class="list-group-item-text">' + 'Wetter' + '</p>' +
                 '</li>' +
+                '<li class="list-group-item">' +
+                '<p class="list-group-item-text">' + matchedCities[i].abstract + '</p>' +
+                '</li>' +
                 '</ul>' +
-                '<div class="panel-footer text-muted">' + matchedCities[i].author + '</div>' +
+                '<div class="panel-footer text-muted small">' + matchedCities[i].author + '</div>' +
                 '</div>' +
                 '</div>'
 
