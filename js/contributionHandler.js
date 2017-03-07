@@ -95,7 +95,8 @@ $(document).ready(function () {
                         '<div class="alert alert-success" id="operationMessage">' +
                         '<p><span class="glyphicon glyphicon-ok"></span> Addition successful.</p>' +
                         '</div>'
-                    )
+                    );
+                    resetButton.click();
                 } else {
                     message.replaceWith(
                         '<div class="alert alert-danger" id="operationMessage">' +
@@ -104,7 +105,7 @@ $(document).ready(function () {
                         response + '<br>' +
                         '</p>' +
                         '</div>'
-                    )
+                    );
                 }
             });
         });

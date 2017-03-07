@@ -28,7 +28,7 @@ if (isset($newCity)) {
         $cities->asXML('../data/cities.xml');
 
         $response = true;
-    } else $response = "Entry exists already!";
+    } else $response = "Repository already contains this city!";
 } else $response = false;
 
 echo $response;
