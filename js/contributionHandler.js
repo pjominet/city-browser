@@ -88,7 +88,7 @@ $(document).ready(function () {
             };
             var message = $('#operationMessage');
 
-            $.post("data/addToXML.php", {data: city}, function (response) {
+            $.post("php/addToXML.php", {data: city}, function (response) {
                 //console.log(response);
                 if (response == true) {
                     message.replaceWith(
