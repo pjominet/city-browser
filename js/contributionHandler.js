@@ -1,37 +1,53 @@
 $(document).ready(function () {
 
     /** Initialization **/
-    var submitButton = $('#submitBook');
+    var submitButton = $('#submit');
     var resetButton = $('#resetForm');
-    var cityInput = $('#inputCity').focus();
-    var authorInput = $('#inputAuthor');
-    var abstractInput = $('#inputAbstract');
-    var cityIsSet = false;
+    var authorInput = $('#inputAuthor').focus();
+    var cityInputEN = $('#inputCity-en');
+    var cityInputDE = $('#inputCity-de');
+    var abstractInputEN = $('#inputAbstract-en');
+    var abstractInputDE = $('#inputAbstract-de');
     var authorIsSet = false;
-    var abstractIsSet = false;
+    var cityEnIsSet = false;
+    var cityDeIsSet = false;
+    var abstractEnIsSet = false;
+    var abstractDeIsSet = false;
 
     /** Input Handler **/
-    cityInput.keyup(function () {
-        cityIsSet = validateInput(cityInput.val(), $('#validateCity'));
-        everythingIsSet();
-        somethingIsSet();
-    });
-
     authorInput.keyup(function () {
         authorIsSet = validateInput(authorInput.val(), $('#validateAuthor'));
         everythingIsSet();
         somethingIsSet();
     });
 
-    abstractInput.keyup(function () {
-        abstractIsSet = validateInput(abstractInput.val(), $('#validateAbstract'));
+    cityInputEN.keyup(function () {
+        cityEnIsSet = validateInput(cityInputEN.val(), $('#validateCity-en'));
         everythingIsSet();
         somethingIsSet();
     });
 
-    /** Validate Input Values **/
+    cityInputDE.keyup(function () {
+        cityDeIsSet = validateInput(cityInputDE.val(), $('#validateCity-de'));
+        everythingIsSet();
+        somethingIsSet();
+    });
+
+    abstractInputEN.keyup(function () {
+        abstractEnIsSet = validateInput(abstractInputEN.val(), $('#validateAbstract-en'));
+        everythingIsSet();
+        somethingIsSet();
+    });
+
+    abstractInputDE.keyup(function () {
+        abstractDeIsSet = validateInput(abstractInputDE.val(), $('#validateAbstract-de'));
+        everythingIsSet();
+        somethingIsSet();
+    });
+
+    /** Validate Inputs **/
     function validateInput(input, inputField) {
-        if (input != '') {
+        if (input != "") {
             inputField.addClass('has-success');
             return true;
         } else {
@@ -41,7 +57,7 @@ $(document).ready(function () {
     }
 
     function everythingIsSet() {
-        if (cityIsSet && authorIsSet && abstractIsSet) {
+        if (authorIsSet && ((cityDeIsSet && abstractDeIsSet) || (cityEnIsSet && abstractEnIsSet))) {
             submitButton.removeAttr('disabled');
             return true;
         } else {
@@ -51,7 +67,7 @@ $(document).ready(function () {
     }
 
     function somethingIsSet() {
-        if(cityIsSet || authorIsSet || abstractIsSet) {
+        if(authorIsSet || cityDeIsSet || cityInputEN || abstractDeIsSet || abstractEnIsSet) {
             resetButton.removeAttr('disabled');
             return true;
         }
@@ -64,13 +80,15 @@ $(document).ready(function () {
             event.preventDefault();
 
             var city = {
-                name: cityInput.val(),
                 author: authorInput.val(),
-                abstract: abstractInput.val()
+                nameEn: cityInputEN.val(),
+                nameDe: cityInputDE.val(),
+                abstractEn: abstractInputEN.val(),
+                abstractDe: abstractInputDE.val()
             };
             var message = $('#operationMessage');
 
-            $.post("php/addToXML.php", {xmlData: city}, function (response) {
+            $.post("data/addToXML.php", {data: city}, function (response) {
                 //console.log(response);
                 if (response == true) {
                     message.replaceWith(
@@ -98,10 +116,12 @@ $(document).ready(function () {
             $(this).closest('form').find("input, textarea").val("");
             resetButton.attr('disabled', true);
             submitButton.attr('disabled', true);
-            validateInput(cityInput.val(), $('#validateCity'));
             validateInput(authorInput.val(), $('#validateAuthor'));
-            validateInput(abstractInput.val(), $('#validateAbstract'));
-            cityInput.focus();
+            validateInput(cityInputEN.val(), $('#validateCity-en'));
+            validateInput(cityInputDE.val(), $('#validateCity-de'));
+            validateInput(abstractInputEN.val(), $('#validateAbstract-en'));
+            validateInput(abstractInputDE.val(), $('#validateAbstract-de'));
+            authorInput.focus();
         }
     )
 });
