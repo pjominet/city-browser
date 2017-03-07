@@ -51,7 +51,7 @@ $(document).ready(function () {
                 appendDropdownDefault();
                 appendState = true;
             }
-            changeDropdownLabel('German');
+            changeDropdownLabel('Deutsch');
             searchByOption = 1;
             var checkInput = searchBar.val();
             if (checkInput != '') {

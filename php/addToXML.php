@@ -29,6 +29,6 @@ if (isset($newCity)) {
 
         $response = true;
     } else $response = "Repository already contains this city!";
-} else $response = false;
+} else $response = "Bad data!";
 
 echo $response;
