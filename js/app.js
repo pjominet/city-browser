@@ -8,30 +8,42 @@ $(document).ready(function () {
     var descriptionAbstract = {en:"", de:""};
     var nameWithLangExt;
     var weather;
-    var matchedWeather = [];
     var searchResults = 0;
     var searchByOption = 0; //default state, 1 = German, 2 = English
     var appendState = false; //default state
     var searchBar = $('#searchBar');
     var searchButton = $('#searchButton');
     var apiKey = "abcbdb8391c5d46d624cb81ecbdd9d91";
+    var weatherImgRoot = "http://openweathermap.org/img/w/";
     searchBar.focus();
 
     /** Data Handler **/
     function queryCities() {
-        $.get("data/cities.xml", function (data) {
-            cities = data;
-        }, "xml");
+        var deferred = $.Deferred();
+        $.ajax({
+            type: 'GET',
+            url: "data/cities.xml",
+            dataType: "xml",
+            success: function (data) {
+                cities = data;
+            }
+        });
+        return deferred.promise();
     }
 
-    function queryWeather(cityName, language) {
-        $.get('http://api.openweathermap.org/data/2.5/weather?q=' + cityName +
-            '&APPID=' + apiKey +
-            '&units=metric' +
-            '&mode=xml' +
-            '&lang=' + language, function (data) {
-            weather = data;
-        }, "xml");
+    function queryWeather(cityName) {
+        var apiURL = 'http://api.openweathermap.org/data/2.5/weather?mode=xml&units=metric' +'&q='+ cityName +'&APPID='+ apiKey;
+        //console.log(apiURL);
+        var deferred = $.Deferred();
+        $.ajax({
+            type: 'GET',
+            url: apiURL,
+            dataType: "xml",
+            success: function (data) {
+                weather = data;
+            }
+        });
+        return deferred.promise();
     }
 
     /** Action Handlers **/
@@ -117,6 +129,7 @@ $(document).ready(function () {
         //reset variables & flush old data
         searchResults = 0;
         matchedCities = [];
+        console.log(weather);
         $('#accordion').empty();
         // start search
         var userInput = searchBar.val();
@@ -183,6 +196,20 @@ $(document).ready(function () {
         }
     }
 
+    function getWeatherIcon(city) {
+        queryWeather(city);
+        if(weather != undefined) {
+            return $(weather).find('weather').attr('icon') + '.png';
+        }
+    }
+
+    function getWeatherTemp(city) {
+        queryWeather(city);
+        if(weather != undefined) {
+            return $(weather).find('temperature').attr('value') + '°C';
+        }
+    }
+
     function findCityInArray (byName) {
         for (var i = 0, len = matchedCities.length; i < len; i++) {
             if (matchedCities[i].name === byName)
@@ -207,7 +234,7 @@ $(document).ready(function () {
                 '</div>' +
                 '</div>'
             );
-            generateAccordion(searchResults);
+            setTimeout(generateAccordion(searchResults), 1000);
 
         } else if (searchResults === 0 && checkInput.length > 2 && !/(\s+)/.test(checkInput)) {
             resultPanel.replaceWith(
@@ -227,25 +254,31 @@ $(document).ready(function () {
         var accordion = '';
 
         for (var i = 0; i < numberResults; i++) {
+            var nameWihtoutExt = matchedCities[i].name.replace('(en)', '').replace('(de)', ''). replace(' ', '');
+            var icon = getWeatherIcon(nameWihtoutExt);
+            var temp = getWeatherTemp(nameWihtoutExt);
 
             accordion +=
                 '<!-- Tab ' + (i + 1) + ' -->' +
                 '<div class="panel panel-default">' +
-                '<div class="panel-heading accordion-heading" data-toggle="collapse" data-target="#collapse_' + i + '" data-parent="#accordion">' +
-                '<h4 class="panel-title">' + matchedCities[i].name + '</h4>' +
-                '</div>' +
-                '<!-- Collapsible Content -->' +
-                '<div id="collapse_' + i + '" class="panel-collapse collapse">' +
-                '<ul class="list-group">' +
-                '<li class="list-group-item">' +
-                '<p class="list-group-item-text">' + 'Wetter' + '</p>' +
-                '</li>' +
-                '<li class="list-group-item">' +
-                '<p class="list-group-item-text">' + matchedCities[i].abstract + '</p>' +
-                '</li>' +
-                '</ul>' +
-                '<div class="panel-footer text-muted small">' + matchedCities[i].author + '</div>' +
-                '</div>' +
+                    '<div class="panel-heading accordion-heading" data-toggle="collapse" data-target="#collapse_' + i + '" data-parent="#accordion">' +
+                        '<h4 class="panel-title">' + matchedCities[i].name + '</h4>' +
+                    '</div>' +
+                    '<!-- Collapsible Content -->' +
+                    '<div id="collapse_' + i + '" class="panel-collapse collapse">' +
+                        '<ul class="list-group">' +
+                            '<li class="list-group-item">' +
+                                '<p class="list-group-item-text">' +
+                                    '<img src="' + weatherImgRoot + icon + '" alt="current weather icon"> ' +
+                                    '&nbsp;@&nbsp;' + temp +
+                                '</p>' +
+                            '</li>' +
+                            '<li class="list-group-item">' +
+                                '<p class="list-group-item-text">' + matchedCities[i].abstract + '</p>' +
+                            '</li>' +
+                        '</ul>' +
+                        '<div class="panel-footer text-muted small">' + matchedCities[i].author + '</div>' +
+                    '</div>' +
                 '</div>'
 
         }
