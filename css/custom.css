@@ -21,6 +21,9 @@ h2 {
 .accordion-heading {
     cursor: pointer;
 }
+textarea {
+    resize: none;
+}
 
 @media (min-width: 768px) {
     body {
@@ -31,5 +34,13 @@ h2 {
         width: 80%;
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
         background-color: white;
+    }
+}
+
+@media (max-width: 767px) {
+    .helperlabel {
+        margin-left: 1.5em;
+        padding-top: .5em;
+        font-size: small;
     }
 }

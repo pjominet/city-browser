@@ -130,8 +130,7 @@ $(document).ready(function () {
         var descriptionAbstract = {en:"", de:""};
         var nameWithLangExt;
 
-        // do not search when input is less than 3 characters or no data
-        if (input.length > 2) {
+        if (input.length != 0) {
             queryCities();
             if(cities != undefined) {
                 $.each($(cities).find('city'), function (index, city) {
@@ -140,9 +139,9 @@ $(document).ready(function () {
                     cityName["de"] = $(city).find('cityName[lang="de"]').text();
                     descriptionAbstract["en"] = $(city).find('description').find('abstract[lang="en"]').text();
                     descriptionAbstract["de"] = $(city).find('description').find('abstract[lang="de"]').text();
-                    //console.log(index +'='+ cityName);
+                    //console.log(index + '=' + cityName);
                     $.each(cityName, function (key, value) {
-                        //console.log(key +'='+ value);
+                        //console.log(key + '=' + value);
                         if (searchByOption === 0) {
                             if (cityName[key].toLowerCase().includes(input)) {
                                 if (cityName["en"] == cityName["de"])

@@ -93,7 +93,7 @@ $(document).ready(function () {
                 if (response == true) {
                     message.replaceWith(
                         '<div class="alert alert-success" id="operationMessage">' +
-                        '<p><span class="glyphicon glyphicon-ok"></span> Addition successful.</p>' +
+                        '<p><span class="glyphicon glyphicon-ok"></span> Addition of ' + cityInputEN.val() + 'successful.</p>' +
                         '</div>'
                     );
                     resetButton.click();
