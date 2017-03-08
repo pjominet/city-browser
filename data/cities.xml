@@ -18,4 +18,22 @@
             <abstract lang="en">Capital of Luxembourg, a small country in the middle of Europe.</abstract>
         </description>
     </city>
-<city><cityName lang="en">Berlin</cityName><cityName lang="de">Berlin</cityName><description><author>Patrick Jominet</author><abstract lang="en">Berlin is the capital and the largest city of Germany as well as one of its constituent 16 states. With a population of approximately 3.5 million people, Berlin is the second most populous city proper and the seventh most populous urban area in the European Union. Located in northeastern Germany on the banks of rivers Spree and Havel, it is the centre of the Berlin-Brandenburg Metropolitan Region, which has about 6 million residents from more than 180 nations. Due to its location in the European Plain, Berlin is influenced by a temperate seasonal climate. Around one-third of the city's area is composed of forests, parks, gardens, rivers and lakes.</abstract><abstract lang="de">Berlin ist die Bundeshauptstadt der Bundesrepublik Deutschland und zugleich eines ihrer Länder. Die Stadt Berlin ist mit gut 3,5 Millionen Einwohnern die bevölkerungsreichste und mit 892 Quadratkilometern die flächengrößte Gemeinde Deutschlands. Sie bildet das Zentrum der Metropolregion Berlin/Brandenburg (6 Millionen Einw.) und der Agglomeration Berlin (4,4 Millionen Einw.). Der Stadtstaat besteht aus zwölf Bezirken. Neben den Flüssen Spree und Havel befinden sich im Stadtgebiet kleinere Fließgewässer sowie zahlreiche Seen und Wälder.</abstract></description></city></cities>
+    <city>
+        <cityName lang="en">Colmarberg</cityName>
+        <cityName lang="de">Colmarberg</cityName>
+        <description>
+            <author>Patrick Jominet</author>
+            <abstract lang="de">Lorem Ipsum</abstract>
+            <abstract lang="en">Lorem Ipsum</abstract>
+        </description>
+    </city>
+    <city>
+        <cityName lang="en">Test1</cityName>
+        <cityName lang="de">Test2</cityName>
+        <description>
+            <author>Patrick Jominet</author>
+            <abstract lang="de">TestText</abstract>
+            <abstract lang="en">Blabla</abstract>
+        </description>
+    </city>
+</cities>

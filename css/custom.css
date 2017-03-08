@@ -37,10 +37,21 @@ textarea {
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
     .helperlabel {
         margin-left: 1.5em;
         padding-top: .5em;
         font-size: small;
+    }
+
+    h1 {
+        font-size: 400%;
+        text-align: center;
+    }
+}
+
+@media (min-width: 1440px) {
+    h1 {
+        padding-top: .3em;
     }
 }
