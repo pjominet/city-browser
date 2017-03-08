@@ -3,6 +3,10 @@ $(document).ready(function () {
     /** Initialization **/
     var cities;
     var matchedCities = [];
+    var cityName = {en:"", de:""};
+    var descriptionAuthor = "";
+    var descriptionAbstract = {en:"", de:""};
+    var nameWithLangExt;
     var weather;
     var matchedWeather = [];
     var searchResults = 0;
@@ -125,12 +129,7 @@ $(document).ready(function () {
     function searchCities(input) {
         input = input.toLowerCase();
 
-        var cityName = {en:"", de:""};
-        var descriptionAuthor = "";
-        var descriptionAbstract = {en:"", de:""};
-        var nameWithLangExt;
-
-        if (input.length != 0) {
+        if (input.length > 0 && !/(\s+)/.test(input)) {
             queryCities();
             if(cities != undefined) {
                 $.each($(cities).find('city'), function (index, city) {
@@ -210,7 +209,7 @@ $(document).ready(function () {
             );
             generateAccordion(searchResults);
 
-        } else if (searchResults === 0 && checkInput.length > 2) {
+        } else if (searchResults === 0 && checkInput.length > 2 && !/(\s+)/.test(checkInput)) {
             resultPanel.replaceWith(
                 '<div class="alert alert-warning" id="resultPanel">' +
                 '<p><span class="glyphicon glyphicon-remove"></span> No city found</p>' +
