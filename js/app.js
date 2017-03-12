@@ -47,6 +47,8 @@ $(document).ready(function () {
     }
 
     /** Action Handlers **/
+    //instantly query Data
+    queryCities();
     // when any key is pressed while typing
     searchBar.keyup(
         function () {
@@ -140,10 +142,10 @@ $(document).ready(function () {
 
     /** Search Algorithms **/
     function searchCities(input) {
+        // all input to lowercase for better comparability
         input = input.toLowerCase();
 
         if (input.length > 0 && !/(\s+)/.test(input)) {
-            queryCities();
             if(cities != undefined) {
                 $.each($(cities).find('city'), function (index, city) {
                     descriptionAuthor = $(city).find('description').find('author').text();
