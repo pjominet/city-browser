@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="cities.xsd">
+    <city>
+        <cityName lang="en">CityEn</cityName>
+        <cityName lang="de">CityDe</cityName>
+        <description>
+            <author>Name</author>
+            <abstract lang="de">TextDe</abstract>
+            <abstract lang="en">TextEn</abstract>
+        </description>
+    </city>
+</cities>
