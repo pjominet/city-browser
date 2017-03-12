@@ -14,7 +14,7 @@ $(document).ready(function () {
     var abstractEnIsSet = false;
     var abstractDeIsSet = false;
 
-    /** Input Handler **/
+    /** Input Handlers **/
     authorInput.keyup(function () {
         authorIsSet = validateInput(authorInput.val(), $('#validateAuthor'));
         everythingIsSet();
@@ -90,7 +90,7 @@ $(document).ready(function () {
 
             $.post("php/addToXML.php", {data: city}, function (response) {
                 //console.log(response);
-                if (response == true) {
+                if (response == 200) {
                     message.replaceWith(
                         '<div class="alert alert-success" id="operationMessage">' +
                         '<p><span class="glyphicon glyphicon-ok"></span> Addition of ' + cityInputEN.val() + 'successful.</p>' +
