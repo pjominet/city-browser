@@ -131,7 +131,6 @@ $(document).ready(function () {
         //reset variables & flush old data
         searchResults = 0;
         matchedCities = [];
-        console.log(weather);
         $('#accordion').empty();
         // start search
         var userInput = searchBar.val();
@@ -158,16 +157,18 @@ $(document).ready(function () {
                         //console.log(key + '=' + value);
                         if (searchByOption === 0) {
                             if (cityName[key].toLowerCase().includes(input)) {
-                                if (cityName["en"] == cityName["de"])
-                                    nameWithLangExt = cityName[key] + " (" + key + ")";
-                                else
-                                    nameWithLangExt = cityName[key];
-                                matchedCities.push({
-                                    name: nameWithLangExt,
-                                    author: descriptionAuthor,
-                                    abstract: descriptionAbstract[key]
-                                });
-                                searchResults++;
+                                if (findCityInArray(cityName[key]) == null) {
+                                    if (cityName["en"] == cityName["de"])
+                                        nameWithLangExt = cityName[key] + " (" + key + ")";
+                                    else
+                                        nameWithLangExt = cityName[key];
+                                    matchedCities.push({
+                                        name: nameWithLangExt,
+                                        author: descriptionAuthor,
+                                        abstract: descriptionAbstract[key]
+                                    });
+                                    searchResults++;
+                                }
                             }
                         } else if (searchByOption === 1) {
                             if (cityName["de"].toLowerCase().includes(input)) {
@@ -236,6 +237,7 @@ $(document).ready(function () {
                 '</div>' +
                 '</div>'
             );
+            // avoid old data mixing with new data
             setTimeout(generateAccordion(searchResults), 1000);
 
         } else if (searchResults === 0 && checkInput.length > 2 && !/(\s+)/.test(checkInput)) {
