@@ -27,8 +27,8 @@ if (isset($newCity)) {
 
         $cities->asXML('../data/cities.xml');
 
-        $response = 200;
-    } else $response = "Repository already contains this city!";
-} else $response = "Bad data!";
+        $response = 200; //OK
+    } else $response = "Repository already contains this city!"; //409 - Conflict
+} else $response = "Bad data!"; //400 - Bad Request
 
 echo $response;
