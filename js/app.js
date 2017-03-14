@@ -3,7 +3,6 @@ $(document).ready(function () {
     /** Initialization **/
     var searchResults = 0;
     var searchByOption = 0; //default state, 1 = German, 2 = English
-    var appendState = false; //default state
     var searchBar = $('#searchBar').focus();
     var searchButton = $('#searchButton');
 
@@ -59,12 +58,14 @@ $(document).ready(function () {
         });
 
     /** Button label Handlers **/
+    var appendDefaultOption = false; //default state
+
     $('#searchGerman').click(
         function (event) {
             event.preventDefault();
-            if (!appendState) {
+            if (!appendDefaultOption) {
                 appendDropdownDefault();
-                appendState = true;
+                appendDefaultOption = true;
             }
             changeDropdownLabel('Deutsch');
             searchByOption = 1;
@@ -78,9 +79,9 @@ $(document).ready(function () {
     $('#searchEnglish').click(
         function (event) {
             event.preventDefault();
-            if (!appendState) {
+            if (!appendDefaultOption) {
                 appendDropdownDefault();
-                appendState = true;
+                appendDefaultOption = true;
             }
             changeDropdownLabel('English');
             searchByOption = 2;
@@ -95,10 +96,10 @@ $(document).ready(function () {
         event.preventDefault();
         changeDropdownLabel('International');
         searchByOption = 0;
-        if (appendState) {
+        if (appendDefaultOption) {
             $('li.divider').remove();
             $('li').filter(":contains('International')").remove();
-            appendState = false;
+            appendDefaultOption = false;
         }
         var checkInput = searchBar.val();
         if (checkInput != '') {
@@ -133,7 +134,6 @@ $(document).ready(function () {
         var userInput = searchBar.val();
         searchCities(userInput);
         resultPanelHandler();
-
     }
 
     /** Search Algorithms **/
@@ -246,6 +246,7 @@ $(document).ready(function () {
                 '</div>'
             );
             generateAccordion(searchResults);
+            //setTimeout(function () { generateAccordion(searchResults); }, 200)
 
         } else if (searchResults === 0 && checkInput.length > 2 && !/(\s+)/.test(checkInput)) {
             resultPanel.replaceWith(

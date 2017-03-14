@@ -9,32 +9,33 @@ $(document).ready(function () {
     var cityInputDE = $('#inputCity-de');
     var abstractInputEN = $('#inputAbstract-en');
     var abstractInputDE = $('#inputAbstract-de');
-    var authorIsSet = false;
-    var cityEnIsSet = false;
-    var cityDeIsSet = false;
-    var abstractEnIsSet = false;
-    var abstractDeIsSet = false;
-    var countries;
+
 
     /** Country Picker Constructor **/
+    var countries;
+
     $.ajax({
         type: 'GET',
         url: "data/countries.xml",
         dataType: "xml",
         success: function (countries) {
-            var options = [];
+            var options = '';
             $.each($(countries).find('country'), function(index, country) {
                 var countryCode = $(country).find('countryCode').text();
-                console.log(countryCode);
                 var label = $(country).find('name').text();
-                options.push("<option value='"+ countryCode +"'>"+ label +"</option>");
+                options += ("<option value='"+ countryCode +"'>"+ label +"</option>");
             });
-            options = options.join('');
             countryPicker.append(options);
         }
     });
 
     /** Input Handlers **/
+    var authorIsSet = false;
+    var cityEnIsSet = false;
+    var cityDeIsSet = false;
+    var abstractEnIsSet = false;
+    var abstractDeIsSet = false;
+
     authorInput.keyup(function () {
         authorIsSet = validateInput(authorInput.val(), $('#validateAuthor'));
         everythingIsSet();
