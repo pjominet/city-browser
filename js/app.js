@@ -1,23 +1,17 @@
 $(document).ready(function () {
 
     /** Initialization **/
-    var cities;
-    var matchedCities = [];
-    var cityName = {en:"", de:""};
-    var descriptionAuthor = "";
-    var descriptionAbstract = {en:"", de:""};
-    var nameWithLangExt;
-    var weather;
     var searchResults = 0;
     var searchByOption = 0; //default state, 1 = German, 2 = English
     var appendState = false; //default state
-    var searchBar = $('#searchBar');
+    var searchBar = $('#searchBar').focus();
     var searchButton = $('#searchButton');
-    var apiKey = "abcbdb8391c5d46d624cb81ecbdd9d91";
-    var weatherImgRoot = "http://openweathermap.org/img/w/";
-    searchBar.focus();
 
     /** Data Handler **/
+    var cities;
+    var weather;
+    var apiKey = "abcbdb8391c5d46d624cb81ecbdd9d91";
+
     function queryCities() {
         var deferred = $.Deferred();
         $.ajax({
@@ -31,8 +25,10 @@ $(document).ready(function () {
         return deferred.promise();
     }
 
-    function queryWeather(cityName) {
-        var apiURL = 'http://api.openweathermap.org/data/2.5/weather?mode=xml&units=metric' +'&q='+ cityName +'&APPID='+ apiKey;
+    function queryWeather(cityName, countryCode) {
+        var apiURL = 'http://api.openweathermap.org/data/2.5/weather?mode=xml&units=metric'
+            + '&q=' + cityName + ',' + countryCode.toLowerCase()
+            + '&APPID=' + apiKey;
         //console.log(apiURL);
         var deferred = $.Deferred();
         $.ajax({
@@ -141,14 +137,22 @@ $(document).ready(function () {
     }
 
     /** Search Algorithms **/
+    var matchedCities = [];
+    var cityName = {en: "", de: ""};
+    var descriptionAuthor = "";
+    var countryCode = "";
+    var descriptionAbstract = {en: "", de: ""};
+    var nameWithLangExt;
+
     function searchCities(input) {
         // all input to lowercase for better comparability
         input = input.toLowerCase();
 
         if (input.length > 0 && !/(\s+)/.test(input)) {
-            if(cities != undefined) {
+            if (cities != undefined) {
                 $.each($(cities).find('city'), function (index, city) {
                     descriptionAuthor = $(city).find('description').find('author').text();
+                    countryCode = $(city).find('countryCode').text();
                     cityName["en"] = $(city).find('cityName[lang="en"]').text();
                     cityName["de"] = $(city).find('cityName[lang="de"]').text();
                     descriptionAbstract["en"] = $(city).find('description').find('abstract[lang="en"]').text();
@@ -166,7 +170,8 @@ $(document).ready(function () {
                                     matchedCities.push({
                                         name: nameWithLangExt,
                                         author: descriptionAuthor,
-                                        abstract: descriptionAbstract[key]
+                                        abstract: descriptionAbstract[key],
+                                        cc: countryCode
                                     });
                                     searchResults++;
                                 }
@@ -177,7 +182,8 @@ $(document).ready(function () {
                                     matchedCities.push({
                                         name: cityName["de"],
                                         author: descriptionAuthor,
-                                        abstract: descriptionAbstract["de"]
+                                        abstract: descriptionAbstract["de"],
+                                        cc: countryCode
                                     });
                                     searchResults++;
                                 }
@@ -188,7 +194,8 @@ $(document).ready(function () {
                                     matchedCities.push({
                                         name: cityName["en"],
                                         author: descriptionAuthor,
-                                        abstract: descriptionAbstract["en"]
+                                        abstract: descriptionAbstract["en"],
+                                        cc: countryCode
                                     });
                                     searchResults++;
                                 }
@@ -200,21 +207,21 @@ $(document).ready(function () {
         }
     }
 
-    function getWeatherIcon(city) {
-        queryWeather(city);
-        if(weather != undefined) {
+    function getWeatherIcon(city, cc) {
+        queryWeather(city, cc);
+        if (weather != undefined) {
             return $(weather).find('weather').attr('icon') + '.png';
         }
     }
 
-    function getWeatherTemp(city) {
-        queryWeather(city);
-        if(weather != undefined) {
+    function getWeatherTemp(city, cc) {
+        queryWeather(city, cc);
+        if (weather != undefined) {
             return $(weather).find('temperature').attr('value') + '°C';
         }
     }
 
-    function findCityInArray (byName) {
+    function findCityInArray(byName) {
         for (var i = 0, len = matchedCities.length; i < len; i++) {
             if (matchedCities[i].name === byName)
                 return matchedCities[i];
@@ -229,13 +236,13 @@ $(document).ready(function () {
         if (searchResults > 0) {
             resultPanel.replaceWith(
                 '<div class="panel panel-default" id="resultPanel">' +
-                '<div class="panel-heading">' +
-                '<h3>Search Results&nbsp;<span class="label label-info" id="resultNbr">' + searchResults + '</span></h3>' +
-                '</div>' +
-                '<div class="panel-body">' +
-                '<!-- Accordion View -->' +
-                '<div class="panel-group" id="accordion"></div>' +
-                '</div>' +
+                    '<div class="panel-heading">' +
+                        '<h3>Search Results&nbsp;<span class="label label-info" id="resultNbr">' + searchResults + '</span></h3>' +
+                    '</div>' +
+                    '<div class="panel-body">' +
+                        '<!-- Accordion View -->' +
+                        '<div class="panel-group" id="accordion"></div>' +
+                    '</div>' +
                 '</div>'
             );
             generateAccordion(searchResults);
@@ -243,7 +250,7 @@ $(document).ready(function () {
         } else if (searchResults === 0 && checkInput.length > 2 && !/(\s+)/.test(checkInput)) {
             resultPanel.replaceWith(
                 '<div class="alert alert-warning" id="resultPanel">' +
-                '<p><span class="glyphicon glyphicon-remove"></span> No city found</p>' +
+                '<p><span class="glyphicon glyphicon-remove"></span>&nbsp;No city found</p>' +
                 '</div>'
             );
         } else {
@@ -254,36 +261,44 @@ $(document).ready(function () {
     }
 
     /** Accordion Constructor **/
+    var weatherImgRoot = "http://openweathermap.org/img/w/";
+    var nameWithoutExt;
+    var cc;
+
     function generateAccordion(numberResults) {
         var accordion = '';
 
         for (var i = 0; i < numberResults; i++) {
-            var nameWihtoutExt = matchedCities[i].name.replace('(en)', '').replace('(de)', ''). replace(' ', '');
-            var icon = getWeatherIcon(nameWihtoutExt);
-            var temp = getWeatherTemp(nameWihtoutExt);
+            nameWithoutExt = matchedCities[i].name.replace('(en)', '').replace('(de)', '').replace(' ', '');
+            cc = matchedCities[i].cc;
+            var icon = getWeatherIcon(nameWithoutExt, cc);
+            var temp = getWeatherTemp(nameWithoutExt, cc);
 
             if (icon != undefined) {
                 accordion +=
                     '<!-- Tab ' + (i + 1) + ' -->' +
                     '<div class="panel panel-default">' +
-                    '<div class="panel-heading accordion-heading" data-toggle="collapse" data-target="#collapse_' + i + '" data-parent="#accordion">' +
-                    '<h4 class="panel-title">' + matchedCities[i].name + '</h4>' +
-                    '</div>' +
-                    '<!-- Collapsible Content -->' +
-                    '<div id="collapse_' + i + '" class="panel-collapse collapse">' +
-                    '<ul class="list-group">' +
-                    '<li class="list-group-item">' +
-                    '<p class="list-group-item-text">' +
-                    '<img src="' + weatherImgRoot + icon + '" alt="current weather icon"> ' +
-                    '&nbsp;@&nbsp;' + temp +
-                    '</p>' +
-                    '</li>' +
-                    '<li class="list-group-item">' +
-                    '<p class="list-group-item-text">' + matchedCities[i].abstract + '</p>' +
-                    '</li>' +
-                    '</ul>' +
-                    '<div class="panel-footer text-muted small">' + matchedCities[i].author + '</div>' +
-                    '</div>' +
+                        '<div class="panel-heading accordion-heading" data-toggle="collapse" data-target="#collapse_' + i + '" data-parent="#accordion">' +
+                            '<h4 class="panel-title">' + matchedCities[i].name + '</h4>' +
+                        '</div>' +
+                        '<!-- Collapsible Content -->' +
+                        '<div id="collapse_' + i + '" class="panel-collapse collapse">' +
+                            '<ul class="list-group">' +
+                                '<li class="list-group-item">' +
+                                    '<p class="list-group-item-text">' + cc + '</p>' +
+                                '</li> ' +
+                                '<li class="list-group-item">' +
+                                    '<p class="list-group-item-text">' +
+                                        '<img src="' + weatherImgRoot + icon + '" alt="current weather icon"> ' +
+                                        '&nbsp;@&nbsp;' + temp +
+                                    '</p>' +
+                                '</li>' +
+                                '<li class="list-group-item">' +
+                                    '<p class="list-group-item-text">' + matchedCities[i].abstract + '</p>' +
+                                '</li>' +
+                            '</ul>' +
+                            '<div class="panel-footer text-muted small">' + matchedCities[i].author + '</div>' +
+                        '</div>' +
                     '</div>'
             }
         }
