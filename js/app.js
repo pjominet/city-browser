@@ -49,6 +49,7 @@ $(document).ready(function () {
     /** Action Handlers **/
     //instantly query Data
     queryCities();
+
     // when any key is pressed while typing
     searchBar.keyup(
         function () {
@@ -237,8 +238,7 @@ $(document).ready(function () {
                 '</div>' +
                 '</div>'
             );
-            // avoid old data mixing with new data
-            setTimeout(generateAccordion(searchResults), 1000);
+            generateAccordion(searchResults);
 
         } else if (searchResults === 0 && checkInput.length > 2 && !/(\s+)/.test(checkInput)) {
             resultPanel.replaceWith(
@@ -262,29 +262,30 @@ $(document).ready(function () {
             var icon = getWeatherIcon(nameWihtoutExt);
             var temp = getWeatherTemp(nameWihtoutExt);
 
-            accordion +=
-                '<!-- Tab ' + (i + 1) + ' -->' +
-                '<div class="panel panel-default">' +
+            if (icon != undefined) {
+                accordion +=
+                    '<!-- Tab ' + (i + 1) + ' -->' +
+                    '<div class="panel panel-default">' +
                     '<div class="panel-heading accordion-heading" data-toggle="collapse" data-target="#collapse_' + i + '" data-parent="#accordion">' +
-                        '<h4 class="panel-title">' + matchedCities[i].name + '</h4>' +
+                    '<h4 class="panel-title">' + matchedCities[i].name + '</h4>' +
                     '</div>' +
                     '<!-- Collapsible Content -->' +
                     '<div id="collapse_' + i + '" class="panel-collapse collapse">' +
-                        '<ul class="list-group">' +
-                            '<li class="list-group-item">' +
-                                '<p class="list-group-item-text">' +
-                                    '<img src="' + weatherImgRoot + icon + '" alt="current weather icon"> ' +
-                                    '&nbsp;@&nbsp;' + temp +
-                                '</p>' +
-                            '</li>' +
-                            '<li class="list-group-item">' +
-                                '<p class="list-group-item-text">' + matchedCities[i].abstract + '</p>' +
-                            '</li>' +
-                        '</ul>' +
-                        '<div class="panel-footer text-muted small">' + matchedCities[i].author + '</div>' +
+                    '<ul class="list-group">' +
+                    '<li class="list-group-item">' +
+                    '<p class="list-group-item-text">' +
+                    '<img src="' + weatherImgRoot + icon + '" alt="current weather icon"> ' +
+                    '&nbsp;@&nbsp;' + temp +
+                    '</p>' +
+                    '</li>' +
+                    '<li class="list-group-item">' +
+                    '<p class="list-group-item-text">' + matchedCities[i].abstract + '</p>' +
+                    '</li>' +
+                    '</ul>' +
+                    '<div class="panel-footer text-muted small">' + matchedCities[i].author + '</div>' +
                     '</div>' +
-                '</div>'
-
+                    '</div>'
+            }
         }
         $('#accordion').append(accordion).find('.panel-collapse:first').addClass("in");
     }
