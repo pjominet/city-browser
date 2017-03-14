@@ -1,41 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
-    <xs:element name="cities">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element maxOccurs="unbounded" ref="city"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="city">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element maxOccurs="unbounded" ref="cityName"/>
-                <xs:element ref="description"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="cityName">
-        <xs:complexType>
-            <xs:simpleContent>
-                <xs:extension base="xs:NCName">
-                    <xs:attribute name="lang" use="required" type="xs:NCName"/>
-                </xs:extension>
-            </xs:simpleContent>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="description">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="author"/>
-                <xs:element maxOccurs="unbounded" ref="abstract"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="author" type="xs:string"/>
-    <xs:element name="abstract">
-        <xs:complexType mixed="true">
-            <xs:attribute name="lang" use="required" type="xs:NCName"/>
-        </xs:complexType>
-    </xs:element>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="cities" type="citiesType"/>
+  <xs:complexType name="cityType">
+    <xs:sequence>
+      <xs:element type="cityNameType" name="cityName" maxOccurs="2" minOccurs="2"/>
+      <xs:element type="xs:string" name="countryCode"/>
+      <xs:element type="descriptionType" name="description"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="abstractType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="lang" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="descriptionType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="author"/>
+      <xs:element type="abstractType" name="abstract" maxOccurs="2" minOccurs="2"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="citiesType">
+    <xs:sequence>
+      <xs:element type="cityType" name="city" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cityNameType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="lang" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
 </xs:schema>

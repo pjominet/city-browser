@@ -4,6 +4,7 @@
     <city>
         <cityName lang="en">CityEn</cityName>
         <cityName lang="de">CityDe</cityName>
+        <countryCode>CC</countryCode>
         <description>
             <author>Name</author>
             <abstract lang="de">TextDe</abstract>
