@@ -19,6 +19,7 @@ if (isset($newCity)) {
         $city = $cities->addChild('city');
         $city->addChild('cityName', $newCity['nameEn'])->addAttribute('lang', 'en');
         $city->addChild('cityName', $newCity['nameDe'])->addAttribute('lang', 'de');
+        $city->addChild('countryCode', $newCity['countryCode']);
 
         $description = $city->addChild('description');
         $description->addChild('author', $newCity['author']);

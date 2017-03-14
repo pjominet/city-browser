@@ -4,6 +4,7 @@ $(document).ready(function () {
     var submitButton = $('#submit');
     var resetButton = $('#resetForm');
     var authorInput = $('#inputAuthor').focus();
+    var countryPicker = $('#countryPicker');
     var cityInputEN = $('#inputCity-en');
     var cityInputDE = $('#inputCity-de');
     var abstractInputEN = $('#inputAbstract-en');
@@ -13,6 +14,25 @@ $(document).ready(function () {
     var cityDeIsSet = false;
     var abstractEnIsSet = false;
     var abstractDeIsSet = false;
+    var countries;
+
+    /** Country Picker Constructor **/
+    $.ajax({
+        type: 'GET',
+        url: "data/countries.xml",
+        dataType: "xml",
+        success: function (countries) {
+            var options = [];
+            $.each($(countries).find('country'), function(index, country) {
+                var countryCode = $(country).find('countryCode').text();
+                console.log(countryCode);
+                var label = $(country).find('name').text();
+                options.push("<option value='"+ countryCode +"'>"+ label +"</option>");
+            });
+            options = options.join('');
+            countryPicker.append(options);
+        }
+    });
 
     /** Input Handlers **/
     authorInput.keyup(function () {
@@ -45,6 +65,11 @@ $(document).ready(function () {
         somethingIsSet();
     });
 
+    countryPicker.click(function () {
+        everythingIsSet();
+        somethingIsSet();
+    });
+
     /** Validate Inputs **/
     function validateInput(input, inputField) {
         if (input != "") {
@@ -57,7 +82,9 @@ $(document).ready(function () {
     }
 
     function everythingIsSet() {
-        if (authorIsSet && ((cityDeIsSet && abstractDeIsSet) || (cityEnIsSet && abstractEnIsSet))) {
+        if (authorIsSet &&
+            ((cityDeIsSet && abstractDeIsSet) || (cityEnIsSet && abstractEnIsSet)) &&
+            countryPicker.find('option:selected').val() != 'placeholder') {
             submitButton.removeAttr('disabled');
             return true;
         } else {
@@ -67,7 +94,8 @@ $(document).ready(function () {
     }
 
     function somethingIsSet() {
-        if(authorIsSet || cityDeIsSet || cityInputEN || abstractDeIsSet || abstractEnIsSet) {
+        if(authorIsSet || cityDeIsSet || cityInputEN || abstractDeIsSet || abstractEnIsSet ||
+            countryPicker.find('option:selected').val() != 'placeholder') {
             resetButton.removeAttr('disabled');
             return true;
         }
@@ -84,7 +112,8 @@ $(document).ready(function () {
                 nameEn: cityInputEN.val(),
                 nameDe: cityInputDE.val(),
                 abstractEn: abstractInputEN.val(),
-                abstractDe: abstractInputDE.val()
+                abstractDe: abstractInputDE.val(),
+                countryCode: countryPicker.find('option:selected').val()
             };
             var message = $('#operationMessage');
 
