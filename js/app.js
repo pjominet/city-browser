@@ -1,18 +1,18 @@
 $(document).ready(function () {
 
     /** Initialization **/
-    var searchResults = 0;
-    var searchByOption = 0; //default state, 1 = German, 2 = English
-    var searchBar = $('#searchBar').focus();
-    var searchButton = $('#searchButton');
+    let searchResults = 0;
+    let searchByOption = 0; //default state, 1 = German, 2 = English
+    let searchBar = $('#searchBar').focus();
+    let searchButton = $('#searchButton');
 
     /** Data Handler **/
-    var cities;
-    var weather;
-    var apiKey = "abcbdb8391c5d46d624cb81ecbdd9d91";
+    let cities;
+    let weather;
+    let apiKey = "abcbdb8391c5d46d624cb81ecbdd9d91";
 
     function queryCities() {
-        var deferred = $.Deferred();
+        let deferred = $.Deferred();
         $.ajax({
             type: 'GET',
             url: "data/cities.xml",
@@ -25,11 +25,11 @@ $(document).ready(function () {
     }
 
     function queryWeather(cityName, countryCode) {
-        var apiURL = 'http://api.openweathermap.org/data/2.5/weather?mode=xml&units=metric'
+        let apiURL = 'http://api.openweathermap.org/data/2.5/weather?mode=xml&units=metric'
             + '&q=' + cityName + ',' + countryCode.toLowerCase()
             + '&APPID=' + apiKey;
         //console.log(apiURL);
-        var deferred = $.Deferred();
+        let deferred = $.Deferred();
         // limited to 60 calls/minute
         $.ajax({
             type: 'GET',
@@ -59,7 +59,7 @@ $(document).ready(function () {
         });
 
     /** Button label Handlers **/
-    var appendDefaultOption = false; //default state
+    let appendDefaultOption = false; //default state
 
     $('#searchGerman').click(
         function (event) {
@@ -70,7 +70,7 @@ $(document).ready(function () {
             }
             changeDropdownLabel('Deutsch');
             searchByOption = 1;
-            var checkInput = searchBar.val();
+            let checkInput = searchBar.val();
             if (checkInput != '') {
                 executeSearch();
             }
@@ -86,7 +86,7 @@ $(document).ready(function () {
             }
             changeDropdownLabel('English');
             searchByOption = 2;
-            var checkInput = searchBar.val();
+            let checkInput = searchBar.val();
             if (checkInput != '') {
                 executeSearch();
             }
@@ -102,7 +102,7 @@ $(document).ready(function () {
             $('li').filter(":contains('International')").remove();
             appendDefaultOption = false;
         }
-        var checkInput = searchBar.val();
+        let checkInput = searchBar.val();
         if (checkInput != '') {
             executeSearch();
         }
@@ -132,18 +132,18 @@ $(document).ready(function () {
         matchedCities = [];
         $('#accordion').empty();
         // start search
-        var userInput = searchBar.val();
+        let userInput = searchBar.val();
         searchCities(userInput);
         resultPanelHandler();
     }
 
     /** Search Algorithms **/
-    var matchedCities = [];
-    var cityName = {en: "", de: ""};
-    var descriptionAuthor = "";
-    var countryCode = "";
-    var descriptionAbstract = {en: "", de: ""};
-    var nameWithLangExt;
+    let matchedCities = [];
+    let cityName = {en: "", de: ""};
+    let descriptionAuthor = "";
+    let countryCode = "";
+    let descriptionAbstract = {en: "", de: ""};
+    let nameWithLangExt;
 
     function searchCities(input) {
         // all input to lowercase for better comparability
@@ -223,7 +223,7 @@ $(document).ready(function () {
     }
 
     function findCityInArray(byName) {
-        for (var i = 0, len = matchedCities.length; i < len; i++) {
+        for (let i = 0, len = matchedCities.length; i < len; i++) {
             if (matchedCities[i].name === byName)
                 return matchedCities[i];
         }
@@ -232,8 +232,8 @@ $(document).ready(function () {
 
     /** Result Panel Handler **/
     function resultPanelHandler() {
-        var input = searchBar.val();
-        var resultPanel = $('#resultPanel');
+        let input = searchBar.val();
+        let resultPanel = $('#resultPanel');
         if (searchResults > 0 && input.length > 1) {
             resultPanel.replaceWith(
                 '<div class="panel panel-default" id="resultPanel">' +
@@ -262,25 +262,24 @@ $(document).ready(function () {
     }
 
     /** Accordion Constructor **/
-    var nameWithoutExt;
-    var cc;
-    var weatherDisplay;
-    var icon;
-    var temp;
+    let nameWithoutExt;
+    let cc;
+    let weatherDisplay;
+    let icon;
+    let temp;
 
     function generateAccordion(numberResults) {
-        var accordion = '';
+        let accordion = '';
 
-        for (var i = 0; i < numberResults; i++) {
+        for (let i = 0; i < numberResults; i++) {
             nameWithoutExt = matchedCities[i].name.replace('(en)', '').replace('(de)', '').replace(' ', '');
             cc = matchedCities[i].cc;
             icon = getWeatherIcon(nameWithoutExt, cc);
             temp = getWeatherTemp(nameWithoutExt, cc);
-            // set loading icon if ajax hasn't completed yet
+            // set loading icon if ajax hasn't completed yet or request limit is exceeded
             if (icon != undefined && temp != undefined) {
                 weatherDisplay = '<img src="http://openweathermap.org/img/w/' + icon + '" alt="current weather icon">&nbsp;@&nbsp;' + temp;
-            }
-            else
+            } else
                 weatherDisplay = '<img src="img/loading.svg" alt="current weather icon">';
 
             accordion +=

@@ -1,28 +1,28 @@
 $(document).ready(function () {
 
     /** Initialization **/
-    var submitButton = $('#submit');
-    var resetButton = $('#resetForm');
-    var authorInput = $('#inputAuthor').focus();
-    var countryPicker = $('#countryPicker');
-    var cityInputEN = $('#inputCity-en');
-    var cityInputDE = $('#inputCity-de');
-    var abstractInputEN = $('#inputAbstract-en');
-    var abstractInputDE = $('#inputAbstract-de');
+    let submitButton = $('#submit');
+    let resetButton = $('#resetForm');
+    let authorInput = $('#inputAuthor').focus();
+    let countryPicker = $('#countryPicker');
+    let cityInputEN = $('#inputCity-en');
+    let cityInputDE = $('#inputCity-de');
+    let abstractInputEN = $('#inputAbstract-en');
+    let abstractInputDE = $('#inputAbstract-de');
 
 
     /** Country Picker Constructor **/
-    var countries;
+    let countries;
 
     $.ajax({
         type: 'GET',
         url: "data/countries.xml",
         dataType: "xml",
         success: function (countries) {
-            var options = '';
+            let options = '';
             $.each($(countries).find('country'), function(index, country) {
-                var countryCode = $(country).find('countryCode').text();
-                var label = $(country).find('name').text();
+                let countryCode = $(country).find('countryCode').text();
+                let label = $(country).find('name').text();
                 options += ("<option value='"+ countryCode +"'>"+ label +"</option>");
             });
             countryPicker.append(options);
@@ -30,11 +30,11 @@ $(document).ready(function () {
     });
 
     /** Input Handlers **/
-    var authorIsSet = false;
-    var cityEnIsSet = false;
-    var cityDeIsSet = false;
-    var abstractEnIsSet = false;
-    var abstractDeIsSet = false;
+    let authorIsSet = false;
+    let cityEnIsSet = false;
+    let cityDeIsSet = false;
+    let abstractEnIsSet = false;
+    let abstractDeIsSet = false;
 
     authorInput.keyup(function () {
         authorIsSet = validateInput(authorInput.val(), $('#validateAuthor'));
@@ -108,7 +108,7 @@ $(document).ready(function () {
         function (event) {
             event.preventDefault();
 
-            var city = {
+            let city = {
                 author: authorInput.val(),
                 nameEn: cityInputEN.val(),
                 nameDe: cityInputDE.val(),
@@ -116,7 +116,7 @@ $(document).ready(function () {
                 abstractDe: abstractInputDE.val(),
                 countryCode: countryPicker.find('option:selected').val()
             };
-            var message = $('#operationMessage');
+            let message = $('#operationMessage');
 
             $.post("php/addToXML.php", {data: city}, function (response) {
                 //console.log(response);
