@@ -30,6 +30,7 @@ $(document).ready(function () {
             + '&APPID=' + apiKey;
         //console.log(apiURL);
         var deferred = $.Deferred();
+        // limited to 60 calls/minute
         $.ajax({
             type: 'GET',
             url: apiURL,
@@ -148,7 +149,7 @@ $(document).ready(function () {
         // all input to lowercase for better comparability
         input = input.toLowerCase();
 
-        if (input.length > 1 && !/(\s+)/.test(input)) {
+        if (input.length > 0 && !/(\s+)/.test(input)) {
             if (cities != undefined) {
                 $.each($(cities).find('city'), function (index, city) {
                     descriptionAuthor = $(city).find('description').find('author').text();
@@ -231,9 +232,9 @@ $(document).ready(function () {
 
     /** Result Panel Handler **/
     function resultPanelHandler() {
-        var checkInput = searchBar.val();
+        var input = searchBar.val();
         var resultPanel = $('#resultPanel');
-        if (searchResults > 0) {
+        if (searchResults > 0 && input.length > 1) {
             resultPanel.replaceWith(
                 '<div class="panel panel-default" id="resultPanel">' +
                     '<div class="panel-heading">' +
@@ -247,7 +248,7 @@ $(document).ready(function () {
             );
             generateAccordion(searchResults);
 
-        } else if (searchResults === 0 && checkInput.length > 2 && !/(\s+)/.test(checkInput)) {
+        } else if (searchResults === 0 && input.length > 2 && !/(\s+)/.test(input)) {
             resultPanel.replaceWith(
                 '<div class="alert alert-warning" id="resultPanel">' +
                 '<p><span class="glyphicon glyphicon-remove"></span>&nbsp;No city found</p>' +
