@@ -10,6 +10,8 @@ $(document).ready(function () {
     let cities;
     let weather;
     let apiKey = "abcbdb8391c5d46d624cb81ecbdd9d91";
+    let icon;
+    let temp;
 
     function queryCities() {
         let deferred = $.Deferred();
@@ -37,13 +39,17 @@ $(document).ready(function () {
             dataType: "xml",
             success: function (data) {
                 weather = data;
+                if(weather != undefined) {
+                    icon = $(weather).find('weather').attr('icon') + '.png';
+                    temp = $(weather).find('temperature').attr('value') + '°C';
+                }
             }
         });
         return deferred.promise();
     }
 
     /** Action Handlers **/
-    //instantly query Data
+    //instantly query City Data
     queryCities();
 
     // when any key is pressed while typing
@@ -208,20 +214,6 @@ $(document).ready(function () {
         }
     }
 
-    function getWeatherIcon(city, cc) {
-        queryWeather(city, cc);
-        if (weather != undefined) {
-            return $(weather).find('weather').attr('icon') + '.png';
-        }
-    }
-
-    function getWeatherTemp(city, cc) {
-        queryWeather(city, cc);
-        if (weather != undefined) {
-            return $(weather).find('temperature').attr('value') + '°C';
-        }
-    }
-
     function findCityInArray(byName) {
         for (let i = 0, len = matchedCities.length; i < len; i++) {
             if (matchedCities[i].name === byName)
@@ -265,8 +257,6 @@ $(document).ready(function () {
     let nameWithoutExt;
     let cc;
     let weatherDisplay;
-    let icon;
-    let temp;
 
     function generateAccordion(numberResults) {
         let accordion = '';
@@ -274,10 +264,9 @@ $(document).ready(function () {
         for (let i = 0; i < numberResults; i++) {
             nameWithoutExt = matchedCities[i].name.replace('(en)', '').replace('(de)', '').replace(' ', '');
             cc = matchedCities[i].cc;
-            icon = getWeatherIcon(nameWithoutExt, cc);
-            temp = getWeatherTemp(nameWithoutExt, cc);
+            queryWeather(nameWithLangExt, cc);
             // set loading icon if ajax hasn't completed yet or request limit is exceeded
-            if (icon != undefined && temp != undefined) {
+            if (icon != undefined && temp != undefined && matchedCities.length < 60) {
                 weatherDisplay = '<img src="http://openweathermap.org/img/w/' + icon + '" alt="current weather icon">&nbsp;@&nbsp;' + temp;
             } else
                 weatherDisplay = '<img src="img/loading.svg" alt="current weather icon">';
@@ -306,7 +295,7 @@ $(document).ready(function () {
                         '<div class="panel-footer text-muted small">' + matchedCities[i].author + '</div>' +
                     '</div>' +
                 '</div>'
-        }
+            }
         $('#accordion').append(accordion).find('.panel-collapse:first').addClass("in");
     }
 });
