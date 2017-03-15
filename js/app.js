@@ -148,7 +148,7 @@ $(document).ready(function () {
         // all input to lowercase for better comparability
         input = input.toLowerCase();
 
-        if (input.length > 0 && !/(\s+)/.test(input)) {
+        if (input.length > 1 && !/(\s+)/.test(input)) {
             if (cities != undefined) {
                 $.each($(cities).find('city'), function (index, city) {
                     descriptionAuthor = $(city).find('description').find('author').text();
@@ -246,7 +246,6 @@ $(document).ready(function () {
                 '</div>'
             );
             generateAccordion(searchResults);
-            //setTimeout(function () { generateAccordion(searchResults); }, 200)
 
         } else if (searchResults === 0 && checkInput.length > 2 && !/(\s+)/.test(checkInput)) {
             resultPanel.replaceWith(
@@ -262,9 +261,11 @@ $(document).ready(function () {
     }
 
     /** Accordion Constructor **/
-    var weatherImgRoot = "http://openweathermap.org/img/w/";
     var nameWithoutExt;
     var cc;
+    var weatherDisplay;
+    var icon;
+    var temp;
 
     function generateAccordion(numberResults) {
         var accordion = '';
@@ -272,36 +273,39 @@ $(document).ready(function () {
         for (var i = 0; i < numberResults; i++) {
             nameWithoutExt = matchedCities[i].name.replace('(en)', '').replace('(de)', '').replace(' ', '');
             cc = matchedCities[i].cc;
-            var icon = getWeatherIcon(nameWithoutExt, cc);
-            var temp = getWeatherTemp(nameWithoutExt, cc);
-
-            if (icon != undefined) {
-                accordion +=
-                    '<!-- Tab ' + (i + 1) + ' -->' +
-                    '<div class="panel panel-default">' +
-                        '<div class="panel-heading accordion-heading" data-toggle="collapse" data-target="#collapse_' + i + '" data-parent="#accordion">' +
-                            '<h4 class="panel-title">' + matchedCities[i].name + '</h4>' +
-                        '</div>' +
-                        '<!-- Collapsible Content -->' +
-                        '<div id="collapse_' + i + '" class="panel-collapse collapse">' +
-                            '<ul class="list-group">' +
-                                '<li class="list-group-item">' +
-                                    '<p class="list-group-item-text">' + cc + '</p>' +
-                                '</li> ' +
-                                '<li class="list-group-item">' +
-                                    '<p class="list-group-item-text">' +
-                                        '<img src="' + weatherImgRoot + icon + '" alt="current weather icon"> ' +
-                                        '&nbsp;@&nbsp;' + temp +
-                                    '</p>' +
-                                '</li>' +
-                                '<li class="list-group-item">' +
-                                    '<p class="list-group-item-text">' + matchedCities[i].abstract + '</p>' +
-                                '</li>' +
-                            '</ul>' +
-                            '<div class="panel-footer text-muted small">' + matchedCities[i].author + '</div>' +
-                        '</div>' +
-                    '</div>'
+            icon = getWeatherIcon(nameWithoutExt, cc);
+            temp = getWeatherTemp(nameWithoutExt, cc);
+            // set loading icon if ajax hasn't completed yet
+            if (icon != undefined && temp != undefined) {
+                weatherDisplay = '<img src="http://openweathermap.org/img/w/' + icon + '" alt="current weather icon">&nbsp;@&nbsp;' + temp;
             }
+            else
+                weatherDisplay = '<img src="img/loading.svg" alt="current weather icon">';
+
+            accordion +=
+                '<!-- Tab ' + (i + 1) + ' -->' +
+                '<div class="panel panel-default">' +
+                    '<div class="panel-heading accordion-heading" data-toggle="collapse" data-target="#collapse_' + i + '" data-parent="#accordion">' +
+                        '<h4 class="panel-title">' + matchedCities[i].name + '</h4>' +
+                    '</div>' +
+                    '<!-- Collapsible Content -->' +
+                    '<div id="collapse_' + i + '" class="panel-collapse collapse">' +
+                        '<ul class="list-group">' +
+                            '<li class="list-group-item">' +
+                                '<p class="list-group-item-text">' + cc + '</p>' +
+                            '</li> ' +
+                            '<li class="list-group-item">' +
+                                '<p class="list-group-item-text">' +
+                                    weatherDisplay +
+                                '</p>' +
+                            '</li>' +
+                            '<li class="list-group-item">' +
+                                '<p class="list-group-item-text">' + matchedCities[i].abstract + '</p>' +
+                            '</li>' +
+                        '</ul>' +
+                        '<div class="panel-footer text-muted small">' + matchedCities[i].author + '</div>' +
+                    '</div>' +
+                '</div>'
         }
         $('#accordion').append(accordion).find('.panel-collapse:first').addClass("in");
     }
