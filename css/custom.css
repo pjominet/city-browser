@@ -21,8 +21,14 @@ h2 {
 .accordion-heading {
     cursor: pointer;
 }
+
 textarea {
     resize: none;
+}
+
+.note {
+    font-style: italic;
+    margin-top: .6em;
 }
 
 @media (min-width: 768px) {

@@ -232,6 +232,9 @@ $(document).ready(function () {
                         '<!-- Accordion View -->' +
                         '<div class="panel-group" id="accordion"></div>' +
                     '</div>' +
+                    '<div class="panel-footer">' +
+                        '<p class="text-muted note"><i>Note: If data isn\'t loading completely, please click the search button again.</p>' +
+                    '</div>' +
                 '</div>'
             );
             generateAccordion(searchResults);
