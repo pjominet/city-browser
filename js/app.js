@@ -14,7 +14,6 @@ $(document).ready(function () {
     let temp;
 
     function queryCities() {
-        let deferred = $.Deferred();
         $.ajax({
             type: 'GET',
             url: "data/cities.xml",
@@ -23,7 +22,6 @@ $(document).ready(function () {
                 cities = data;
             }
         });
-        return deferred.promise();
     }
 
     function queryWeather(cityName, countryCode) {
@@ -31,8 +29,7 @@ $(document).ready(function () {
             + '&q=' + cityName + ',' + countryCode.toLowerCase()
             + '&APPID=' + apiKey;
         //console.log(apiURL);
-        let deferred = $.Deferred();
-        // limited to 60 calls/minute
+        // limited to 60 requests/minute
         $.ajax({
             type: 'GET',
             url: apiURL,
@@ -45,7 +42,6 @@ $(document).ready(function () {
                 }
             }
         });
-        return deferred.promise();
     }
 
     /** Action Handlers **/
@@ -226,7 +222,7 @@ $(document).ready(function () {
     function resultPanelHandler() {
         let input = searchBar.val();
         let resultPanel = $('#resultPanel');
-        if (searchResults > 0 && input.length > 1) {
+        if (searchResults > 0) {
             resultPanel.replaceWith(
                 '<div class="panel panel-default" id="resultPanel">' +
                     '<div class="panel-heading">' +
@@ -295,7 +291,7 @@ $(document).ready(function () {
                         '<div class="panel-footer text-muted small">' + matchedCities[i].author + '</div>' +
                     '</div>' +
                 '</div>'
-            }
+        }
         $('#accordion').append(accordion).find('.panel-collapse:first').addClass("in");
     }
 });
