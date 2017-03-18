@@ -84,7 +84,7 @@ $(document).ready(function () {
 
     function everythingIsSet() {
         if (authorIsSet &&
-            ((cityDeIsSet && abstractDeIsSet) || (cityEnIsSet && abstractEnIsSet)) &&
+            ((cityDeIsSet && abstractDeIsSet) && (cityEnIsSet && abstractEnIsSet)) &&
             countryPicker.find('option:selected').val() != 'placeholder') {
             submitButton.removeAttr('disabled');
             return true;
